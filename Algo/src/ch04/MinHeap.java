@@ -3,24 +3,25 @@ package src.ch04;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaxHeap implements Heap {
+public class MinHeap implements Heap{
+
     private List<Integer> heap;
 
-    public MaxHeap() {
+    public MinHeap() {
         this.heap = new ArrayList<>();
-        heap.add(Integer.MAX_VALUE);
+        this.heap.add(0);
     }
 
-    public int getMax() {
+    public int getMin() {
         return heap.get(1);
     }
 
     public void insert(int value) {
         heap.add(value);
-        // 아래부터 힙의 삽입 연산
 
         int pos = heap.size() - 1;
-        while(pos > 1 && heap.get(pos / 2) < heap.get(pos)) {
+
+        while(pos > 1 && heap.get(pos / 2) > heap.get(pos)) {
             swap(pos, pos / 2);
 
             pos = pos / 2;
@@ -30,28 +31,27 @@ public class MaxHeap implements Heap {
     public int delete() {
         if(heap.size() <= 1) return 0;
 
-        int deletedValue = heap.get(1);
-
+        int deleteValue = heap.get(1);
         heap.set(1, heap.get(heap.size() - 1));
         heap.remove(heap.size() - 1);
 
         int pos = 1;
-        while((pos * 2) < heap.size()) {
-            int max = heap.get(pos * 2);
-            int maxPos = pos * 2;
+        while (pos * 2 < heap.size()) {
+            int minPos = pos * 2;
+            int min = heap.get(pos * 2);
 
-            if((pos * 2) + 1 < heap.size() && max < heap.get((pos * 2) + 1)) {
-                max = heap.get((pos * 2) + 1);
-                maxPos = (pos * 2) + 1;
+            if((pos * 2 + 1) < heap.size() && heap.get(pos * 2 + 1) < min) {
+                minPos = pos * 2 + 1;
+                min = heap.get(minPos);
             }
 
-            if(heap.get(pos) > max) break;
+            if(min > heap.get(pos)) break;
 
-            swap(pos, maxPos);
+            swap(pos, minPos);
 
-            pos = maxPos;
+            pos = minPos;
         }
-        return deletedValue;
+        return deleteValue;
     }
 
     void swap(int indexA, int indexB) {
