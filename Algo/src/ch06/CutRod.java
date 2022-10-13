@@ -11,6 +11,9 @@ public class CutRod {
 
         int maxPrice = cutRod.cutRodDP(price, price.length);
         System.out.println("최대 금액: " + maxPrice);
+
+        int maxPrice2 = cutRod.cutRodDC(price, price.length);
+        System.out.println("최대 금액: " + maxPrice2);
     }
 
     public int cutRodDP(int[] price, int size) {
@@ -28,5 +31,16 @@ public class CutRod {
         }
 
         return maxSell[size];
+    }
+
+    public int cutRodDC(int[] price, int size) {
+        if(size == 0 ) return 0;
+
+        int maxSell = 0;
+
+        for (int i = 1; i <= size; i++) {
+            maxSell = Math.max(maxSell, price[i - 1] + cutRodDC(price,size - i));
+        }
+        return maxSell;
     }
 }
