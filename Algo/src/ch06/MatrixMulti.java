@@ -7,8 +7,12 @@ public class MatrixMulti {
 		int[] arr = {10, 20, 50, 1, 100};
 		int size = arr.length;
 
-		int result = matrixMulti.matrixDP(arr, size);
-		System.out.println("최종 곱셈 횟수: " + result);
+		int resultOfDP = matrixMulti.matrixDP(arr, size);
+		System.out.println("동적 계획 최종 곱셈 횟수: " + resultOfDP);
+
+		int resultOfDC = matrixMulti.matrixDC(arr, 1, arr.length - 1);
+		System.out.println("분할 정복 최종 곱셈 횟수: " + resultOfDC);
+
 	}
 
 	private int matrixDP(int[] arr, int size) {
@@ -32,5 +36,24 @@ public class MatrixMulti {
 			}
 		}
 		return matrix[1][size-1];
+	}
+
+	private int matrixDC(int[] arr, int start, int end) {
+		int k;
+
+		if (start == end) {
+			return 0;
+		} else {
+			int minValue = Integer.MAX_VALUE;
+
+			for (k = start; k < end; k++) {
+				minValue = Math.min(
+						minValue,
+						matrixDC(arr, start, k) + matrixDC(arr, k + 1, end) + arr[start - 1] * arr[k] * arr[end]
+				);
+			}
+			return minValue;
+		}
+
 	}
 }
